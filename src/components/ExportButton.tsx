@@ -1,8 +1,12 @@
 import html2canvas from "html2canvas";
 import { create } from "ipfs-http-client";
-import { useCallback } from "react";
+import { useCallback, useContext, useState } from "react";
 import styled from "styled-components";
 import { Buffer } from "buffer";
+import { CeramicContext, CeramicContextValue } from "../context/ceramic";
+import { DataModel } from "@glazed/datamodel";
+import { DIDDataStore } from "@glazed/did-datastore";
+import { aliases } from "../utils/constants";
 
 interface IExportButtonProps {
   drawingRef: any;
@@ -52,13 +56,10 @@ const SDiv = styled.div`
 const Div = styled.div`
   width: 8px;
 `;
-
 const ExportButton: React.FC<IExportButtonProps> = ({ drawingRef }) => {
-  const captureImage = useCallback(async () => {
-    const canvas = await html2canvas(drawingRef.current);
-    const image = canvas.toDataURL("image/png", 1.0);
-    await saveToIPFS(image);
-  }, []);
+  const [buttonText, setButtonText] = useState("EXPORT");
+  const ceramicContext = useContext(CeramicContext) as CeramicContextValue;
+  const did = ceramicContext?.ceramic?.did?.id;
 
   const saveToIPFS = async (image: string) => {
     try {
@@ -84,23 +85,99 @@ const ExportButton: React.FC<IExportButtonProps> = ({ drawingRef }) => {
       // Pin file to infura
       const pinned = await client.pin.add(created.path);
       console.log("this is:", pinned);
+      console.log(created);
 
       // Save cid to firebase db
       const docData = {
         [created.path]: created.path,
       };
 
-      alert(`Saved to IPFS! cid: ${created.path}`);
+      return created.path;
     } catch (error) {
       alert("Could not save to IPFS try again");
       console.error(error);
     }
   };
 
+  const saveToGallery = async ({ artCid }: { artCid: string }) => {
+    setButtonText("Almost...");
+    fetch("http://localhost:5001/nifty-canvas-3d5ed/us-central1/gallery", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        artCid,
+        did,
+      }),
+    });
+  };
+
+  const saveToProfile = async ({ artCid }: { artCid: string }) => {
+    const userModel = new DataModel({
+      ceramic: ceramicContext?.ceramic,
+      aliases,
+    });
+
+    const userProfile = new DIDDataStore({
+      ceramic: ceramicContext?.ceramic!,
+      model: userModel,
+    });
+
+    const doc = await userProfile.get("niftyCanvasUser");
+
+    const createdAt = Date.now();
+
+    if (!doc) {
+      const data = {
+        did,
+        post: [
+          {
+            artCid,
+            createdAt,
+          },
+        ],
+      };
+
+      return await userProfile.set("niftyCanvasUser", { ...data });
+    } else {
+      const docPost = (doc as any).post;
+      const post = [...docPost];
+
+      post.push({
+        artCid,
+        createdAt,
+      });
+
+      const data = {
+        did,
+        post,
+      };
+
+      return await userProfile.set("niftyCanvasUser", { ...data });
+    }
+  };
+
+  const captureImage = useCallback(async () => {
+    setButtonText("Loading...");
+    const canvas = await html2canvas(drawingRef.current);
+    const image = canvas.toDataURL("image/png", 1.0);
+    const artCid = await saveToIPFS(image);
+    if (artCid) {
+      await saveToGallery({ artCid });
+      await saveToProfile({ artCid });
+    }
+    setButtonText("Done!");
+    setTimeout(() => {
+      alert("saved to IPFS");
+    }, 100);
+  }, [saveToIPFS]);
+
   return (
     <SExportButton onClick={async () => await captureImage()}>
       <SDiv>
-        EXPORT
+        {buttonText}
         <Div></Div>
         <SImg src="/Vector.svg" alt="now" />
       </SDiv>

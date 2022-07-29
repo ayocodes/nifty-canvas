@@ -82,7 +82,7 @@ const Editor: NextPage<IEditorProps> = ({ blur }) => {
         <ResetButton showModal={showModal} setShowModal={setShowModal} />
         <ScaleSlider min={10} max={100} value={scale} setValue={setScale} />
         <SSketchPicker color={selectedColor} onChangeComplete={changeColor} />
-        <ExportButton drawingRef={undefined} />
+        <ExportButton drawingRef={drawingRef} />
 
         <SCanvasContainer>
           <SCanvas>

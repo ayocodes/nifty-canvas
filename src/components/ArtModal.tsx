@@ -4,6 +4,7 @@ import Text from "./Text";
 
 interface IModal {
   modal: boolean;
+  image: string;
   setModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
@@ -17,12 +18,12 @@ const SModal = styled.div`
   display: grid;
   place-items: center;
   z-index: 2000;
-/* filter: blur(10px); */
-backdrop-filter: blur(15px);
+  /* filter: blur(10px); */
+  backdrop-filter: blur(15px);
 `;
 
 const Simg = styled.img`
-width: 50vw;
+  width: 50vw;
 `;
 
 const SModalContent = styled.div`
@@ -34,22 +35,7 @@ const SModalContent = styled.div`
   position: relative;
 `;
 
-const ArtModal: React.FC<IModal> = ({ modal, setModal }) => {
-  const [loading, setLoading] = useState<boolean>(true);
-  const [artPost, setArtPost] = useState<string>();
-
-  useEffect(() => {
-    const data = {
-      artPost: "/1 (4).jpg",
-    };
-
-    setLoading(true);
-
-    setArtPost(data.artPost);
-
-    setLoading(false);
-  }, []);
-
+const ArtModal: React.FC<IModal> = ({ modal, setModal, image }) => {
   if (!modal) {
     return null;
   }
@@ -58,7 +44,7 @@ const ArtModal: React.FC<IModal> = ({ modal, setModal }) => {
   return (
     <SModal onClick={() => setModal(false)}>
       <SModalContent onClick={(e) => e.stopPropagation()}>
-        <Simg src={artPost} alt="" />
+        <Simg src={image} alt="" />
       </SModalContent>
     </SModal>
   );

@@ -78,7 +78,7 @@ export default function Context({ children }: { children: React.ReactNode }) {
     } else {
       alert("Browser doesn't have Metamask");
     }
-  }, []);
+  }, [ceramicInit]);
 
   // Disconnects from Ethereum.
   const disconnect = () => {

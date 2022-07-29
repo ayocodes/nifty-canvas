@@ -174,7 +174,7 @@ const Connected = ({
       setDid(doc.did);
       setPost(doc.post);
     })();
-  }, []);
+  }, [ceramicContext?.ceramic]);
 
   return (
     <>
@@ -193,8 +193,8 @@ const Connected = ({
 
         <SHeader1 type="h5">Post</SHeader1>
         <SPost>
-          {post?.map((post) => (
-            <Post post={post} />
+          {post?.map((post, i) => (
+            <Post key={i} post={post} />
           ))}
         </SPost>
       </SPadding>
@@ -231,7 +231,7 @@ const Post = ({ post }: { post: any }) => {
       const image = await r.text();
       setImage(image);
     })();
-  }, []);
+  }, [post.artCid]);
 
   return <SPostContent src={image} />;
 };

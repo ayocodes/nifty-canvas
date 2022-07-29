@@ -172,7 +172,7 @@ const ExportButton: React.FC<IExportButtonProps> = ({ drawingRef }) => {
     setTimeout(() => {
       alert("saved to IPFS");
     }, 100);
-  }, [saveToIPFS]);
+  }, [saveToIPFS, drawingRef, saveToGallery, saveToProfile]);
 
   return (
     <SExportButton onClick={async () => await captureImage()}>

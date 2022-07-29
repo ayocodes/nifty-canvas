@@ -73,7 +73,7 @@ const ShowcaseArt: React.FC<IShowcaseArtProps> = ({
       const image = await r.text();
       setImage(image);
     })();
-  }, []);
+  }, [artCid]);
 
   return (
     <>

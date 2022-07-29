@@ -7,6 +7,8 @@ interface IShowcaseArtProps {
   avatar: string;
   artTitle: string;
   did: string;
+  func?: React.MouseEventHandler;
+
 }
 
 const SArt = styled.div`
@@ -62,10 +64,12 @@ const ShowcaseArt: React.FC<IShowcaseArtProps> = ({
   artTitle,
   avatar,
   did,
+  func
 }) => {
   return (
-    <SArt>
-      <Simg src={artUrl} alt="" />
+    <SArt               
+    >
+      <Simg src={artUrl} alt="" onClick={func} />
       <SUserD>
         <SAvatar src={avatar} />
         <SBox>

@@ -1,6 +1,6 @@
-import { useRef, useEffect } from "react";
-import Row from "./Row";
+ import { useEffect, useRef } from "react";
 import styled from "styled-components";
+import Row from "./Row";
 
 interface IDrawingPanelProps {
   width: number;
@@ -11,7 +11,7 @@ interface IDrawingPanelProps {
 }
 
 interface ISDrawingPanel {
-    scale: number;
+  scale: number;
 }
 
 const SDrawingPanel = styled.div<ISDrawingPanel>`

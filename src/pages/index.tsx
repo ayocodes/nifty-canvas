@@ -2,6 +2,7 @@ import type { NextPage } from "next";
 import Head from "next/head";
 import { useState, useEffect } from "react";
 import styled from "styled-components";
+import ArtModal from "../components/ArtModal";
 import ShowcaseArt from "../components/ShowcaseArt";
 import Text from "../components/Text";
 
@@ -34,7 +35,7 @@ const STitle = styled(Text)`
   background: linear-gradient(90deg, #ffafaf -1.57%, #ff2990 127.46%);
   background-clip: text;
   color: transparent;
-  margin: 0 0 4.2rem .5rem;
+  margin: 0 0 4.2rem 0.5rem;
 `;
 
 const data = [
@@ -60,6 +61,7 @@ const data = [
 
 const Home: NextPage = () => {
   const [art, setArt] = useState<IGalleryProps[]>();
+  const [modal, setModal] = useState(false);
 
   useEffect(() => {
     setArt(data);
@@ -78,12 +80,14 @@ const Home: NextPage = () => {
         <SBox>
           {art?.map((art) => (
             <ShowcaseArt
+              func={() => setModal(true)}
               artUrl={art.artUrl}
               avatar={art.avatar}
               artTitle={art.artTitle}
               did={art.did}
             />
           ))}
+          <ArtModal modal={modal} setModal={setModal}></ArtModal>
         </SBox>
       </SShowcase>
     </div>

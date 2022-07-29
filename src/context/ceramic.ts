@@ -1,5 +1,5 @@
 import { createContext } from "react";
-import { CeramicClient } from "../node_modules/@ceramicnetwork/http-client/lib/ceramic-http-client";
+import { CeramicClient } from "@ceramicnetwork/http-client";
 
 export type CeramicContextValue =
   | undefined

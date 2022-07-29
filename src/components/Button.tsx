@@ -5,6 +5,8 @@ import Text from "./Text";
 interface IButtonProps {
   children: React.ReactNode;
   func?: React.MouseEventHandler;
+  className?: any;
+  color?: string;
 }
 
 const SButton = styled.div`
@@ -29,14 +31,22 @@ const SButton = styled.div`
 `;
 
 const SText = styled(Text)`
-    color: #bb8bab;
+  color: #bb8bab;
 
-`
+  ${({ color }) => {
+    return [color && `color: ${color}`];
+  }};
+`;
 
-const Button: React.FC<IButtonProps> = ({ children, func }) => {
+const Button: React.FC<IButtonProps> = ({
+  children,
+  func,
+  className,
+  color,
+}) => {
   return (
-    <SButton onClick={func}>
-      <SText>{children}</SText>
+    <SButton onClick={func} className={className} color={color}>
+      <SText color={color}>{children}</SText>
     </SButton>
   );
 };

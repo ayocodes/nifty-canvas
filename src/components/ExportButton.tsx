@@ -2,7 +2,6 @@ import html2canvas from "html2canvas";
 import { create } from "ipfs-http-client";
 import { useCallback } from "react";
 import styled from "styled-components";
-import vector from "../components/svg/Vector.svg";
 import { Buffer } from "buffer";
 
 interface IExportButtonProps {
@@ -103,7 +102,7 @@ const ExportButton: React.FC<IExportButtonProps> = ({ drawingRef }) => {
       <SDiv>
         EXPORT
         <Div></Div>
-        <SImg src={vector} alt="now" />
+        <SImg src="/Vector.svg" alt="now" />
       </SDiv>
     </SExportButton>
   );

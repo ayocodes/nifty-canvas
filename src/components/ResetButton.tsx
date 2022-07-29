@@ -1,11 +1,11 @@
-import React from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
-import Delete from "../components/svg/Delete.svg";
+import NavContext from "../context/navContext";
 
 interface ResetButtonProps {
   showModal: boolean;
   setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
-  setShowNav: React.Dispatch<React.SetStateAction<boolean>>;
+  // setShowNav: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const SResetButton = styled.div`
@@ -31,8 +31,9 @@ const SResetButton = styled.div`
 const ResetButton: React.FC<ResetButtonProps> = ({
   showModal,
   setShowModal,
-  setShowNav,
 }) => {
+  const [_, setShowNav] = useContext(NavContext);
+
   if (showModal) {
     return null;
   }
@@ -44,7 +45,7 @@ const ResetButton: React.FC<ResetButtonProps> = ({
         setShowNav(true);
       }}
     >
-      <img src={Delete} alt="reset" />
+      <img src="/Delete.svg" alt="reset" />
     </SResetButton>
   );
 };

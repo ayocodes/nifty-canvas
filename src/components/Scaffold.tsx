@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import Modal from "./Modal";
+import ProfileModal from "./ProfileModal";
 import NavBar from "./NavBar";
 
 interface IScaffoldProp {
@@ -15,11 +15,12 @@ const SScaffold = styled.div`
 const Scaffold: React.FC<IScaffoldProp> = ({ children }) => {
   const [modal, setModal] = useState(false);
 
+
   return (
     <SScaffold>
       {children}
-      {/* <Modal /> */}
-      <NavBar />
+      <ProfileModal modal={modal} setModal={setModal} />
+      <NavBar show={true} setModal={setModal} />
     </SScaffold>
   );
 };

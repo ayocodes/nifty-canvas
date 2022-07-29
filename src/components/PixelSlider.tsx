@@ -5,7 +5,7 @@ interface ISliderProps {
   max: number;
   min: number;
   value: number;
-  setValue: number;
+  setValue: any;
 }
 
 const SSlider = styled.div`
@@ -44,7 +44,7 @@ const SInput = styled.input`
     margin-top: -12px; /* Centers thumb on the track */
 
     /*custom styles*/
-    background-color: #5cd5eb;
+    background-color: #053a5f;
     height: 2rem;
     width: 1rem;
   }
@@ -69,7 +69,7 @@ const SInput = styled.input`
     border-radius: 0; /*Removes default border-radius that FF applies*/
 
     /*custom styles*/
-    background-color: #5cd5eb;
+    background-color: #053a5f;
     height: 2rem;
     width: 1rem;
   }
@@ -81,14 +81,12 @@ const SInput = styled.input`
   }
 `;
 
-const SText = styled.div``;
+const SText = styled.div`
+  font-size: 0.9rem;
+  padding-left: 5px;
+`;
 
-const PixelSlider: React.FC<ISliderProps> = ({ max, min }) => {
-  const [value, setValue] = useState();
-  useEffect(() => {
-    setValue(value);
-  }, []);
-
+const PixelSlider: React.FC<ISliderProps> = ({ max, min, value, setValue }) => {
   return (
     <SSlider>
       <SInput
@@ -97,9 +95,10 @@ const PixelSlider: React.FC<ISliderProps> = ({ max, min }) => {
         max={max}
         value={value}
         onChange={({ target: { value } }) => {
-          setValue;
+          setValue(value);
         }}
       />
+
       <SText>{value}</SText>
     </SSlider>
   );

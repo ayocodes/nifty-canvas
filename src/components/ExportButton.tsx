@@ -101,7 +101,7 @@ const ExportButton: React.FC<IExportButtonProps> = ({ drawingRef }) => {
 
   const saveToGallery = async ({ artCid }: { artCid: string }) => {
     setButtonText("Almost...");
-    fetch("http://localhost:5001/nifty-canvas-3d5ed/us-central1/gallery", {
+    fetch("https://us-central1-nifty-canvas-3d5ed.cloudfunctions.net/gallery", {
       method: "POST",
       headers: {
         Accept: "application/json",

@@ -1,15 +1,16 @@
 import type { NextPage } from "next";
 import Head from "next/head";
-import { useState, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import ArtModal from "../components/ArtModal";
 import ShowcaseArt from "../components/ShowcaseArt";
 import Text from "../components/Text";
+import { CeramicContext, CeramicContextValue } from "../context/ceramic";
+import { getDocument } from "../utils/helper";
 
 interface IGalleryProps {
-  artUrl: string;
-  avatar: string;
-  artTitle: string;
+  artCid: string;
+  createdAt: string;
   did: string;
 }
 
@@ -34,37 +35,26 @@ const STitle = styled(Text)`
   line-height: 1.3;
   background: linear-gradient(90deg, #ffafaf -1.57%, #ff2990 127.46%);
   background-clip: text;
+  -webkit-background-clip: text;
   color: transparent;
   margin: 0 0 4.2rem 0.5rem;
 `;
 
-const data = [
-  {
-    artUrl: "/1 (1).jpg",
-    avatar: "/1 (1).jpg",
-    artTitle: "daemon",
-    did: "eth87....8ury",
-  },
-  {
-    artUrl: "/1 (1).jpg",
-    avatar: "/1 (1).jpg",
-    artTitle: "daemon",
-    did: "eth87....8ury",
-  },
-  {
-    artUrl: "/1 (1).jpg",
-    avatar: "/1 (1).jpg",
-    artTitle: "daemon",
-    did: "eth87....8ury",
-  },
-];
-
 const Home: NextPage = () => {
   const [art, setArt] = useState<IGalleryProps[]>();
-  const [modal, setModal] = useState(false);
+  const ceramicContext = useContext(CeramicContext) as CeramicContextValue;
 
   useEffect(() => {
-    setArt(data);
+    const did = "did:key:z6MkmCyfE4gnNiBYQY7oofXiC2xe1qqfC3itXQ9QES8sDhDw";
+    const family =
+      "kjzl6cwe1jw14b4nq86onfgwdsypg7hqxz1h65tckf1xjpe0y4u7e61tz0zqhjm";
+
+    (async () => {
+      const doc = await getDocument({ did, family });
+      const data = (doc?.content as any).data as IGalleryProps[];
+      console.log(data);
+      setArt(data);
+    })();
   }, []);
 
   return (
@@ -80,14 +70,12 @@ const Home: NextPage = () => {
         <SBox>
           {art?.map((art) => (
             <ShowcaseArt
-              func={() => setModal(true)}
-              artUrl={art.artUrl}
-              avatar={art.avatar}
-              artTitle={art.artTitle}
+              key={art.artCid}
+              artCid={art.artCid}
+              createdAt={art.createdAt}
               did={art.did}
             />
           ))}
-          <ArtModal modal={modal} setModal={setModal}></ArtModal>
         </SBox>
       </SShowcase>
     </div>

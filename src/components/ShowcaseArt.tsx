@@ -1,14 +1,13 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Text from "./Text";
+import ellipsisAddress from "../utils/ellipsisAddress";
+import ArtModal from "./ArtModal";
 
 interface IShowcaseArtProps {
-  artUrl: string;
-  avatar: string;
-  artTitle: string;
+  artCid: string;
+  createdAt: string;
   did: string;
-  func?: React.MouseEventHandler;
-
 }
 
 const SArt = styled.div`
@@ -45,11 +44,12 @@ const SUserD = styled.div`
   bottom: -1px;
 `;
 
-const SAvatar = styled.img`
-  width: 3.13rem;
-  height: 3.13rem;
+const SAvatar = styled.div`
+  min-width: 3.13rem;
+  min-height: 3.13rem;
   margin-left: 1rem;
   border-radius: 50%;
+  background-color: black;
 `;
 
 const SBox = styled.div`
@@ -60,24 +60,35 @@ const SBox = styled.div`
 `;
 
 const ShowcaseArt: React.FC<IShowcaseArtProps> = ({
-  artUrl,
-  artTitle,
-  avatar,
+  artCid,
+  createdAt,
   did,
-  func
 }) => {
+  const [image, setImage] = useState<string>();
+  const [modal, setModal] = useState(false);
+
+  useEffect(() => {
+    (async () => {
+      const r = await fetch(`https://infura-ipfs.io/ipfs/${artCid}`);
+      const image = await r.text();
+      setImage(image);
+    })();
+  }, []);
+
   return (
-    <SArt               
-    >
-      <Simg src={artUrl} alt="" onClick={func} />
-      <SUserD>
-        <SAvatar src={avatar} />
-        <SBox>
-          <Text>{artTitle}</Text>
-          <Text type="h6">{did}</Text>
-        </SBox>
-      </SUserD>
-    </SArt>
+    <>
+      <SArt>
+        <Simg src={image} alt="" onClick={() => setModal(!modal)} />
+        <SUserD>
+          <SAvatar />
+          <SBox>
+            <Text>{createdAt}</Text>
+            <Text type="h6">{did && ellipsisAddress(did)}</Text>
+          </SBox>
+        </SUserD>
+      </SArt>
+      <ArtModal image={image!} modal={modal} setModal={setModal}></ArtModal>
+    </>
   );
 };
 

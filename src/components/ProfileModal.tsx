@@ -1,7 +1,11 @@
+import { DataModel } from "@glazed/datamodel";
+import { DIDDataStore } from "@glazed/did-datastore";
 import React, { useCallback, useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import { CeramicContext, CeramicContextValue } from "../context/ceramic";
+import { aliases } from "../utils/constants";
 import Button from "./Button";
+import ellipsisAddress from "../utils/ellipsisAddress";
 import Text from "./Text";
 
 interface IModal {
@@ -21,7 +25,7 @@ const SModal = styled.div`
   z-index: 3000;
 `;
 
-const SBacground = styled.div`
+const SBackground = styled.div`
   width: 100%;
   height: 13rem;
   background: #1a2138;
@@ -82,12 +86,13 @@ const SProfile = styled.div`
   justify-content: center;
 `;
 
-const SAvatar = styled.img`
+const SAvatar = styled.div`
   position: relative;
   z-index: 1;
-  width: 7rem;
-  height: 7rem;
+  min-width: 7rem;
+  min-height: 7rem;
   border-radius: 50%;
+  background-color: black;
 `;
 
 const SPost = styled.div`
@@ -97,7 +102,7 @@ const SPost = styled.div`
   grid-auto-rows: 1fr;
 `;
 
-const Post = styled.img`
+const SPostContent = styled.img`
   width: 8.5rem;
   height: 8.5rem;
   border-radius: 1rem;
@@ -149,30 +154,31 @@ const Connected = ({
 }) => {
   const [avatar, setAvatar] = useState<string>();
   const [did, setDid] = useState<string>();
-  const [userPosts, setUserPosts] = useState<string[]>();
+  const [post, setPost] = useState<string[]>();
+  const ceramicContext = useContext(CeramicContext) as CeramicContextValue;
 
   useEffect(() => {
-    const data = {
-      did: "0xc0ff.....979",
-      avatar: "/1 (1).jpg",
-      userPosts: [
-        "/1 (1).jpg",
-        "/1 (2).jpg",
-        "/1 (3).jpg",
-        "/1 (4).jpg",
-        "/1 (6).jpg",
-        "/1 (5).jpg",
-      ],
-    };
+    const userModel = new DataModel({
+      ceramic: ceramicContext?.ceramic,
+      aliases,
+    });
 
-    setDid(data.did);
-    setAvatar(data.avatar);
-    setUserPosts(data.userPosts);
+    const userProfile = new DIDDataStore({
+      ceramic: ceramicContext?.ceramic!,
+      model: userModel,
+    });
+
+    (async () => {
+      const doc = await userProfile.get("niftyCanvasUser");
+
+      setDid(doc.did);
+      setPost(doc.post);
+    })();
   }, []);
 
   return (
     <>
-      <SBacground />
+      <SBackground />
       <SPadding>
         <STitle>
           <SHeader type="h4">Profile</SHeader>
@@ -180,15 +186,15 @@ const Connected = ({
         </STitle>
 
         <SProfile>
-          <SAvatar src={avatar} />
+          <SAvatar />
 
-          <SDid>{did}</SDid>
+          <SDid>{did && ellipsisAddress(did)}</SDid>
         </SProfile>
 
         <SHeader1 type="h5">Post</SHeader1>
         <SPost>
-          {userPosts?.map((post) => (
-            <Post src={post}></Post>
+          {post?.map((post) => (
+            <Post post={post} />
           ))}
         </SPost>
       </SPadding>
@@ -212,7 +218,20 @@ const NotConnected = () => {
       >
         {loading ? "loading..." : " Connect wallet"}
       </SButton>
-      )
     </SBoxCenter>
   );
+};
+
+const Post = ({ post }: { post: any }) => {
+  const [image, setImage] = useState<string>();
+
+  useEffect(() => {
+    (async () => {
+      const r = await fetch(`https://infura-ipfs.io/ipfs/${post.artCid}`);
+      const image = await r.text();
+      setImage(image);
+    })();
+  }, []);
+
+  return <SPostContent src={image} />;
 };

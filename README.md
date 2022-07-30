@@ -6,7 +6,7 @@ Nifty Canvas is a pixel art application where users create pixel art, share it o
 
 - Link to Nifty-Canvas demo website: [Nifty-Canvas](https://nifty-canvas.vercel.app/)
 - Link to video demo: [Youtube](https://youtu.be/1xe2FiUtC7A)
-- Link to Nifty-Canvas server: [Github]()
+- Link to Nifty-Canvas server: [Github](https://github.com/ayocodes/nifty-canvas-server)
 
 
 ## How to use
@@ -26,4 +26,4 @@ yarn run dev
 - Infura function
 
 
-*This hackathon is submitted for EthCC Online Hack 2022, **IPFS Category**.*
+*This project is submitted for EthCC Online Hack 2022, **IPFS Category**.*

@@ -105,6 +105,9 @@ const SPost = styled.div`
 const SPostContent = styled.img`
   width: 8.5rem;
   height: 8.5rem;
+  object-fit: cover;
+  /* background-clip: padding-box; */
+
   border-radius: 1rem;
 `;
 

@@ -18,12 +18,12 @@ const SModal = styled.div`
   display: grid;
   place-items: center;
   z-index: 2000;
-  /* filter: blur(10px); */
   backdrop-filter: blur(15px);
 `;
 
 const Simg = styled.img`
-  width: 50vw;
+  max-width: 70vw; 
+  max-height: 90vh;
 `;
 
 const SModalContent = styled.div`
@@ -31,7 +31,6 @@ const SModalContent = styled.div`
   place-items: center;
   border-radius: 1rem;
   max-height: calc(100vh - 3rem);
-  overflow-y: auto;
   position: relative;
 `;
 

@@ -52,8 +52,7 @@ const Home: NextPage = () => {
     (async () => {
       const doc = await getDocument({ did, family });
       const data = (doc?.content as any).data as IGalleryProps[];
-      console.log(data);
-      setArt(data);
+      setArt(data.reverse());
     })();
   }, []);
 

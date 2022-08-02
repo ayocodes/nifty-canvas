@@ -22,15 +22,17 @@ const SModal = styled.div`
 `;
 
 const Simg = styled.img`
-  max-width: 70vw; 
-  max-height: 90vh;
+  height: calc(100vh - 3rem);
 `;
 
 const SModalContent = styled.div`
   display: grid;
+  width: 50vw;
+  background-color: white;
   place-items: center;
   border-radius: 1rem;
   max-height: calc(100vh - 3rem);
+  overflow-y: auto;
   position: relative;
 `;
 

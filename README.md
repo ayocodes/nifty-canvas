@@ -1,6 +1,4 @@
-<!-- - Link to video demo: [Loom](https://www.loom.com/share/d79633973fd6461689004619d9056bc8) -->
-<!-- - Link to Envfy server: [GitHub](https://github.com/kelvinpraises/envfy-server) -->
-<!-- - Link to Envfy demo website: [Envfy Protocol](https://envfy.vercel.app/) -->
+
 ## Nifty-Canvas
 Nifty Canvas is a pixel art application where users create pixel art, share it on a Gallery and check their previous artworks on their profile page.
 
